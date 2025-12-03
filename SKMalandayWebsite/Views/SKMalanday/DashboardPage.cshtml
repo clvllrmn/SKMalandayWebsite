@@ -1,0 +1,65 @@
+﻿@{
+    Layout = "~/Views/Shared/_SKMalandayLayout.cshtml";
+}
+
+<link rel="stylesheet" href="~/Content/Dashboard.css" />
+
+<div class="dashboard-container" ng-controller="SKMalandayController">
+
+    <header class="header">
+        <h1>Simple Dashboard</h1>
+        <div class="profile-icon">U</div>
+    </header>
+
+    <div class="content-grid">
+
+        <!-- PHOTO UPLOAD CARD -->
+        <div class="card photo-card">
+            <h2>Upload Photo</h2>
+
+            <!-- Upload Area -->
+            <div class="upload-area" ng-click="triggerFileInput()">
+                <p>Click to browse or drag & drop your photo</p>
+            </div>
+
+            <!-- Hidden File Input -->
+            <input type="file"
+                   id="fileInput"
+                   accept="image/*"
+                   style="display:none;"
+                   onchange="angular.element(this).scope().onFileSelect(this)" />
+
+            <!-- Upload Button -->
+            <button class="upload-button" ng-click="uploadPhoto()">
+                Upload Image
+            </button>
+
+            <!-- Preview Image -->
+            <img ng-if="previewImageUrl"
+                 ng-src="{{ previewImageUrl }}"
+                 id="previewImage"
+                 style="margin-top:15px; width:100%; border-radius:12px; display:block;" />
+
+            <!-- Status -->
+            <p id="uploadStatus">{{ uploadStatus }}</p>
+        </div>
+
+        <!-- ANALYTICS CARD -->
+        <div class="card analytics-card">
+            <h2>Analytics Overview</h2>
+
+            <div class="chart-container">
+                <h3>Monthly Activity</h3>
+                <canvas id="monthlyActivityChart"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h3>Content Categories</h3>
+                <canvas id="categoryChart"></canvas>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

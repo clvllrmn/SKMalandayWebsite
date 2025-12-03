@@ -1,0 +1,40 @@
+﻿@{
+    Layout = "~/Views/Shared/_SKMalandayLayout.cshtml";
+}
+
+<link rel="stylesheet" href="~/Content/Role.css" />
+
+
+<div class="role-page-container">
+    <div class="role-selection-box">
+
+        <h1 class="header-title">SELECT ACCOUNT TYPE</h1>
+        <p class="header-subtitle">
+            Please choose your role to proceed.
+        </p>
+
+        <div class="role-cards-wrapper">
+
+            <div class="role-card"
+                 onmouseover="this.style.backgroundColor='#e8e8e8';"
+                 onmouseout="this.style.backgroundColor='white';"
+                 onclick="window.location.href='@Url.Action("LoginPage", "SKMalanday")';">
+
+                <span class="role-icon">👤</span>
+                <h2 class="role-title">ADMIN LOGIN</h2>
+                <p class="role-description">Access restricted management panel.</p>
+            </div>
+
+            <div class="role-card"
+                 onmouseover="this.style.backgroundColor='#e8e8e8';"
+                 onmouseout="this.style.backgroundColor='white';"
+                 onclick="window.location.href='@Url.Action("RegistrationPage", "SKMalanday")';">
+
+                <span class="role-icon">👤</span>
+                <h2 class="role-title">USER LOGIN</h2>
+                <p class="role-description">Click here to register your account.</p>
+            </div>
+
+        </div>
+    </div>
+</div>

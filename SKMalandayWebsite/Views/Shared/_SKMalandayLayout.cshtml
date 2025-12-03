@@ -1,0 +1,150 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    @{
+        // HINDI DAPAT TAWAGIN ANG LAYOUT SA SARILI NIYANG FILE
+        // Kaya inalis ang "Layout = "~/Views/Shared/_SKMalandayLayout.cshtml";"
+    }
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #fff;
+            color: #000;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: #243119;
+            padding: 10px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 1000;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            height: 60px;
+        }
+
+            .nav-left img {
+                max-height: 60px;
+                height: auto;
+                width: auto;
+                object-fit: contain;
+                cursor: pointer;
+                margin-right: 20px;
+                border-radius: 50%;
+                background-color: white;
+                padding: 2px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            }
+
+        .nav-links {
+            display: flex;
+            justify-content: flex-end;
+            flex: 1;
+        }
+
+            .nav-links a {
+                color: white;
+                text-decoration: none;
+                margin: 0 15px;
+                font-size: 16px;
+                font-weight: bold;
+                transition: text-decoration 0.2s;
+            }
+
+                .nav-links a:hover {
+                    text-decoration: underline;
+                }
+
+        /* Added display: block to page-content for proper spacing */
+        .page-content {
+            display: block;
+            padding-top: 80px;
+        }
+
+        footer {
+            /* Changed position: absolute to relative/static for better document flow */
+            position: relative;
+            margin-top: 40px;
+            width: 100%;
+            text-align: center;
+            padding: 15px;
+            background: #243119;
+            font-size: 14px;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+    <div>
+        <nav>
+            <div class="nav-left">
+                <a href="@Url.Action("HomePage", "SKMalanday")">
+                    <img src="@Url.Content("~/Content/Images/SKLogo.png")" alt="SK Logo">
+                </a>
+            </div>
+            <div class="nav-links">
+                <a href="@Url.Action("HomePage", "SKMalanday")">Home</a>
+                <a href="@Url.Action("AboutPage", "SKMalanday")">About</a>
+                <a href="@Url.Action("CouncilPage", "SKMalanday")">Council</a>
+                <a href="@Url.Action("ProjectPage", "SKMalanday")">Project</a>
+                <a href="@Url.Action("ContactPage", "SKMalanday")">Contact</a>
+                <a href="@Url.Action("RegistrationPage","SKMalanday")">Registration</a>
+                <a href="@Url.Action("LoginPage", "SKMalanday")">Login</a>
+                <a href="@Url.Action("DashboardPage", "SKMalanday")">Dashboard</a>
+                <a href="@Url.Action("RolePage", "SKMalanday")">Role</a>
+
+
+            </div>
+        </nav>
+    </div>
+
+    <div class="page-content">
+        @RenderBody()
+    </div>
+
+    <div>
+        <footer>
+            © 2025 Sangguniang Kabataan – Barangay Malanday, Marikina City. All Rights Reserved.
+        </footer>
+    </div>
+
+    <script src="~/Scripts/jquery-3.7.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+    <script src="~/Scripts/angular.min.js"></script>
+
+    <script src="~/Scripts/AngularJSHolyScripts/Module.js"></script>
+    <script src="~/Scripts/AngularJSHolyScripts/Service.js"></script>
+    <script src="~/Scripts/AngularJSHolyScripts/Controller.js"></script>
+    @section scripts {
+    <script src="~/Scripts/angular.js"></script>
+    <script src="~/Scripts/app.js"></script>
+    <script src="~/Scripts/SKMalandayWebsiteService.js"></script>
+    <script src="~/Scripts/SKMalandayController.js"></script>
+}
+
+</body>
+</html>

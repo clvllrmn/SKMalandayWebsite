@@ -1,0 +1,131 @@
+﻿@{
+    Layout = "~/Views/Shared/_SKMalandayLayout.cshtml";
+}
+
+<link rel="stylesheet" href="~/Content/Registration.css" />
+
+<body ng-controller="SKMalandayController">
+
+    <div class="content">
+        <div class="form-container">
+            <h2>Youth Registration Form</h2>
+            <p>Be part of the SK Malanday community. Fill out the form below!</p>
+
+            <form name="registrationForm" novalidate>
+
+                <div class="form-group">
+                    <label>Full Name <span class="required">*</span></label>
+                    <input type="text" ng-model="user.fullName" required maxlength="50">
+                </div>
+
+                <div class="form-group">
+                    <label>Birthdate <span class="required">*</span></label>
+                    <input type="date" ng-model="user.birthDate" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Gender <span class="required">*</span></label>
+                    <select ng-model="user.gender" required>
+                        <option value="">Select Gender</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Prefer not to say">Prefer not to say</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Complete Address <span class="required">*</span></label>
+                    <textarea ng-model="user.address" maxlength="50" required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>Contact Number <span class="required">*</span></label>
+                    <input type="text" ng-model="user.contactNo" maxlength="11"
+                           ng-pattern="/^[0-9]{11}$/"
+                           oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                           required>
+                </div>
+
+                <div class="form-group">
+                    <label>Email (Optional)</label>
+                    <input type="email" ng-model="user.email" maxlength="50">
+                </div>
+
+                <div class="form-group">
+                    <label>Your Interest</label>
+                    <select ng-model="user.interest">
+                        <option value="">-- Select an interest --</option>
+                        <option value="Leadership">Leadership</option>
+                        <option value="Sports">Sports</option>
+                        <option value="Arts">Arts</option>
+                        <option value="Education">Education</option>
+                        <option value="Mental Health">Mental Health</option>
+                        <option value="Gender Equality">Gender Equality</option>
+                        <option value="Environment">Environment</option>
+                        <option value="Entrepreneurship">Entrepreneurship</option>
+                        <option value="Digital Literacy">Digital Literacy</option>
+                    </select>
+                </div>
+
+                <!-- Buttons -->
+                <div class="button-group">
+                    <button type="button" class="btn-submit"
+                            ng-click="isEdit ? UpdateUser() : AddUser()">
+                        {{ isEdit ? 'Update' : 'Sign Up' }}
+                    </button>
+
+                    <button type="button" class="btn-delete" ng-click="ClearForm()">
+                        Clear
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <!-- TABLE FOR USERS -->
+    <div class="form-container" ng-show="users.length > 0">
+        <h3>Registered Users</h3>
+
+        <div class="table-container">
+            <table id="usersTable">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Full Name</th>
+                        <th>Birthday</th>
+                        <th>Gender</th>
+                        <th>Email</th>
+                        <th>Address</th>
+                        <th>Interest</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr ng-repeat="u in users track by $index">
+                        <td>{{$index + 1}}</td>
+                        <td>{{u.fullName}}</td>
+                        <td>{{u.birthDate | date:'longDate'}}</td>
+                        <td>{{u.gender}}</td>
+                        <td>{{u.email}}</td>
+                        <td>{{u.address}}</td>
+                        <td>{{u.interest}}</td>
+
+                        <td>
+                            <button ng-click="EditUser(u)">Edit</button>
+                            <button ng-click="DeleteUser(u.userID)">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <div class="form-container" ng-show="users.length === 0">
+        <h3>Registered Users</h3>
+        <p style="text-align:center;">No registered users yet.</p>
+    </div>
+
+</body>

@@ -1,0 +1,122 @@
+﻿html, body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    color:white;
+    color: #2c3e50;
+    min-height: 100vh;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column; 
+}
+
+main {
+    flex: 1; 
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+}
+
+.header-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+.contact-container {
+    background-color: #ffffff;
+    padding: 10px 10px;
+    border-radius: 16px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+    width: 80%;
+    max-width: 600px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+}
+
+    .contact-container h1 {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: #243119;
+        margin-top: 70px;
+        text-align: center;
+    }
+
+    .contact-container > p {
+        font-size: 15px;
+        color: #555;
+        text-align: center;
+        line-height: 1.5;
+        margin: 0;
+        padding: 0 10px;
+    }
+
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+    background-color: #e8f5e9;
+    padding: 18px 20px;
+    border-radius: 12px;
+    gap: 15px;
+    box-shadow: 0 4px 8px rgba(76, 175, 80, 0.15);
+    transition: background-color 0.3s ease;
+    cursor: default;
+    width: 100%;
+}
+
+    .contact-item:hover {
+        background-color: #c8e6c9;
+    }
+
+    .contact-item i,
+    .contact-item .material-icons {
+        color: #243119;
+        font-size: 24px;
+        min-width: 24px;
+    }
+
+    .contact-item p {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 600;
+        color: #2f2f2f;
+        flex: 1;
+        word-break: break-word;
+        text-align: left;
+    }
+
+@media (max-width: 600px) {
+    .contact-container {
+        padding: 30px 20px;
+    }
+
+        .contact-container h1 {
+            font-size: 26px;
+        }
+
+        .contact-container > p {
+            font-size: 14px;
+        }
+
+    .contact-item {
+        padding: 12px 14px;
+    }
+
+        .contact-item p {
+            font-size: 14px;
+        }
+}
