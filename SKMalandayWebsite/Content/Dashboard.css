@@ -1,139 +1,57 @@
-﻿
-body {
-    background-color: #f1f8f5;
-    font-family: 'Segoe UI', sans-serif;
-    margin: 0;
-    padding: 20px; /* smaller */
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    min-height: 100vh;
-}
-
 .dashboard-container {
-    background: #ffffff;
-    border-radius: 16px;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.06);
+    width: 80%;
+    margin: auto;
+    padding: 30px;
+}
+
+.upload-box input {
+    display: block;
+    padding: 10px;
+    margin-top: 5px;
+    width: 300px;
+}
+
+.preview-container {
+    margin-top: 20px;
+    padding: 15px;
+    border: 2px solid #ddd;
+    width: 300px;
+}
+
+.preview-img {
     width: 100%;
-    max-width: 950px; /* smaller width */
-    padding: 25px; /* smaller padding */
+    border-radius: 8px;
 }
 
-
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 2px solid #e8f3ec;
-    padding-bottom: 15px; /* smaller */
-    margin-bottom: 25px; /* smaller */
-}
-
-    .header h1 {
-        margin: 0;
-        font-size: 24px; /* smaller */
-        font-weight: 700;
-        color: #2e7d32;
-    }
-
-.profile-icon {
-    width: 38px;
-    height: 38px;
-    background: #e8f5e9;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #2e7d32;
-    font-size: 14px; /* smaller */
-    font-weight: bold;
-}
-
-/* -------------------------------------- */
-/* GRID */
-/* -------------------------------------- */
-.content-grid {
-    display: grid;
-    grid-template-columns: 1fr 1.8fr; /* slightly tighter ratio */
-    gap: 20px; /* smaller gap */
-}
-
-/* -------------------------------------- */
-/* CARDS */
-/* -------------------------------------- */
-.card {
-    background: #ffffff;
-    padding: 20px; /* smaller */
-    border-radius: 16px;
-    border: 1px solid #e1efe6;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.04);
-}
-
-    .card h2 {
-        margin-bottom: 12px;
-        font-size: 18px; /* smaller */
-        font-weight: 600;
-        color: #2e7d32;
-    }
-
-/* -------------------------------------- */
-/* UPLOAD AREA */
-/* -------------------------------------- */
-.upload-area {
-    border: 2px dashed #a5d6a7;
-    border-radius: 12px;
-    padding: 18px; /* smaller */
-    text-align: center;
-    cursor: pointer;
-    transition: 0.3s;
-    background-color: #f9fefb;
-}
-
-    .upload-area p {
-        margin: 0;
-        font-size: 13px; /* smaller */
-        color: #4f5b52;
-    }
-
-.upload-button {
-    width: 100%;
-    margin-top: 12px;
-    padding: 10px; /* smaller */
-    background: #2e7d32;
+.remove-btn, .add-btn {
+    margin-top: 15px;
+    padding: 10px 20px;
+    background: #e74c3c;
     color: white;
     border: none;
-    border-radius: 8px;
-    font-size: 14px; /* smaller */
-    font-weight: 600;
     cursor: pointer;
 }
 
-    .upload-button:hover {
-        background: #1b5e20;
-    }
+.add-btn {
+    background: #27ae60;
+}
 
-#previewImage {
-    margin-top: 15px; /* smaller */
-    max-width: 100%;
-    max-height: 130px; /* smaller */
-    display: none;
+.project-grid {
+    margin-top: 25px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.project-card {
+    padding: 10px;
+    background: #f7f7f7;
     border-radius: 8px;
-    border: 1px solid #c8e6c9;
+    text-align: center;
 }
 
-/* -------------------------------------- */
-/* CHARTS */
-/* -------------------------------------- */
-.chart-container {
-    padding: 15px; /* smaller */
-    background: #f9fefb;
-    border: 1px solid #d2e9d5;
-    border-radius: 14px;
-    margin-bottom: 18px; /* smaller */
-}
-
-    .chart-container h3 {
-        font-size: 14px; /* smaller */
-        margin-bottom: 10px;
-        color: #2e7d32;
+    .project-card img {
+        width: 100%;
+        border-radius: 8px;
     }
+
