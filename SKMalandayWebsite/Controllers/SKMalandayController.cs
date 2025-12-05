@@ -1,87 +1,208 @@
-﻿using SKMalandayWebsite.Models;
+using Newtonsoft.Json;
+using SKMalandayWebsite.Models;
 using SKMalandayWebsite.Models.Context;
 using System;
-using System.Data.Entity; // Required for Entity Framework operations
+using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.Entity.Validation;
+using System.IO;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 
 namespace SKMalandayWebsite.Controllers
 {
     public class SKMalandayController : Controller
     {
-        // ... (View Action Methods omitted for brevity) ...
 
         #region View Actions
-        public ActionResult RegistrationPage() { return View(); }
-        public ActionResult AboutPage() { return View(); }
-        public ActionResult ProjectPage() { return View(); }
-        public ActionResult ContactPage() { return View(); }
-        public ActionResult CouncilPage() { return View(); }
-        public ActionResult RolePage() { return View(); }
-        public ActionResult HomePage() { return View(); }
+
+        public ActionResult RegistrationPage() => View();
+
+        public ActionResult AboutPage() => View();
+
+        public ActionResult ProjectPage() => View();
+
+        public ActionResult ContactPage() => View();
+
+        public ActionResult CouncilPage() => View();
+
+        public ActionResult RolePage() => View();
+
+        public ActionResult HomePage() => View();
+
+        public ActionResult DashboardPage() => View();
+
         #endregion
 
-        JsonResult VerifyConnection(UserInformation userinfo) { try { if (string.IsNullOrEmpty(userinfo.contactNo)) { return Json(new { success = false, message = "Error: Contact Number is required." }, JsonRequestBehavior.AllowGet); } if (userinfo.birthDate == null) { return Json(new { success = false, message = "Error: Birthdate is required." }, JsonRequestBehavior.AllowGet); } using (var db = new SKContext()) { var newUser = new tbl_usersModel() { fullName = userinfo.fullName, email = userinfo.email, address = userinfo.address, contactNo = userinfo.contactNo, birthDate = userinfo.birthDate.Value, gender = userinfo.gender, interest = userinfo.interest, createdAt = DateTime.Now, updatedAt = DateTime.Now, }; db.tbl_users.Add(newUser); db.SaveChanges(); return Json(new { success = true, message = "User registered successfully." }, JsonRequestBehavior.AllowGet); } } catch (Exception ex) { string errorMessage = ex.InnerException?.Message ?? ex.Message; return Json(new { success = false, message = $"Error: {errorMessage}" }, JsonRequestBehavior.AllowGet); } }
 
-        // 2. READ API Endpoint (Aligned with getUsersService)
-        [HttpGet]
+        #region Login
+
+        public ActionResult LoginPage(string Username, string Password)
+        {
+            try
+            {
+                if (Username == "admin" && Password == "admin123")
+                {
+                    Session["UserFname"] = "Kathryn";
+                    Session["UserId"] = 0;
+
+                    return RedirectToAction("DashboardPage", "SKMalanday");
+                }
+
+                return View();
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        #endregion
+
         public JsonResult GetUsers()
         {
+            using (var db = new SKContext())
+            {
+                var list = db.tbl_users
+                             .OrderByDescending(u => u.createdAt)
+                             .Select(u => new
+                             {
+                                 u.userID,
+                                 u.fullName,
+                                 birthday = u.birthDate,
+                                 u.gender,
+                                 u.email,
+                                 u.address,
+                                 u.contactNo,
+                                 u.interest
+                             })
+                             .ToList();
+
+                return Json(list, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+
+
+        [HttpPost]
+        public JsonResult VerifyConnection(UserInformation userinfo)
+        {
             try
             {
+                if (userinfo == null)
+                {
+                    return Json(new { success = false, message = "Invalid payload received." });
+                }
+
+                if (string.IsNullOrWhiteSpace(userinfo.fullName))
+                {
+                    return Json(new { success = false, message = "Full Name is required." });
+                }
+
+                if (!userinfo.birthDate.HasValue)
+                {
+                    return Json(new { success = false, message = "Birthdate is required." });
+                }
+
                 using (var db = new SKContext())
                 {
-                    // Select only the necessary fields to match the UserInformation model
-                    var users = db.tbl_users
-                        .Select(u => new UserInformation
-                        {
-                            userID = u.userID,
-                            fullName = u.fullName,
-                            birthDate = u.birthDate,
-                            gender = u.gender,
-                            address = u.address,
-                            contactNo = u.contactNo,
-                            email = u.email,
-                            interest = u.interest
-                        })
-                        .ToList();
+                    if (!db.Database.Exists())
+                    {
+                        return Json(new { success = false, message = "Database connection failed. Check connection string 'sk_db'." });
+                    }
 
-                    return Json(new { success = true, data = users }, JsonRequestBehavior.AllowGet);
+                    var newUser = new tbl_usersModel
+                    {
+                        fullName = userinfo.fullName,
+                        email = userinfo.email,
+                        address = userinfo.address,
+                        contactNo = userinfo.contactNo,
+                        birthDate = userinfo.birthDate.Value,
+                        gender = userinfo.gender,
+                        interest = userinfo.interest,
+                        createdAt = DateTime.Now,
+                        updatedAt = DateTime.Now
+                    };
+
+                    db.tbl_users.Add(newUser);
+                    db.SaveChanges();
+
+                    return Json(new { success = true, message = "User registered successfully." });
                 }
             }
             catch (Exception ex)
             {
-                string errorMessage = ex.InnerException?.Message ?? ex.Message;
-                return Json(new { success = false, message = $"Error fetching data. Details: {errorMessage}" }, JsonRequestBehavior.AllowGet);
+                string err = ex.InnerException?.Message ?? ex.Message;
+
+                return Json(new { success = false, message = err });
             }
         }
 
-        // 3. DELETE API Endpoint (Aligned with deleteUserService)
-        [HttpPost]
-        public JsonResult DeleteUser(int id)
+
+        [HttpGet]
+        public JsonResult GetInterestChartData()
         {
             try
             {
                 using (var db = new SKContext())
                 {
-                    var userToDelete = db.tbl_users.Find(id);
+                    var dataGroup = db.tbl_users
+                                      .GroupBy(u => u.interest)
+                                      .Select(g => new
+                                      {
+                                          InterestId = g.Key,
+                                          Count = g.Count()
+                                      })
+                                      .ToList();
 
-                    if (userToDelete == null)
+                    var model = new ChartModel();
+                    List<string> labels = new List<string>();
+                    List<int> counts = new List<int>();
+
+                    foreach (var item in dataGroup)
                     {
-                        return Json(new { success = false, message = $"Error: User with ID {id} not found." }, JsonRequestBehavior.AllowGet);
+                        
+                        string name = GetInterestName(item.InterestId.ToString());
+
+                        labels.Add(name);
+                        counts.Add(item.Count);
                     }
 
-                    db.tbl_users.Remove(userToDelete);
-                    db.SaveChanges();
+                    model.ChartLabels = labels;
+                    model.ChartData = new List<List<int>>();
+                    model.ChartData.Add(counts); 
 
-                    return Json(new { success = true, message = "User deleted successfully." }, JsonRequestBehavior.AllowGet);
+                    return Json(model, JsonRequestBehavior.AllowGet);
                 }
             }
             catch (Exception ex)
             {
-                string errorMessage = ex.InnerException?.Message ?? ex.Message;
-                return Json(new { success = false, message = $"Error deleting user. Details: {errorMessage}" }, JsonRequestBehavior.AllowGet);
+                return Json(new { error = ex.Message }, JsonRequestBehavior.AllowGet);
             }
         }
+
+       
+
+
+        private string GetInterestName(string id)
+        {
+            if (string.IsNullOrEmpty(id)) return "Unspecified";
+
+            switch (id.Trim())
+            {
+                case "1": return "Leadership";
+                case "2": return "Sports";
+                case "8": return "Arts";
+                case "9": return "Education";
+                case "10": return "Mental Health";
+                case "4": return "Gender Equality";
+                case "5": return "Environment";
+                case "6": return "Entrepreneurship";
+                case "7": return "Digital Literacy";
+                default: return "Other (" + id + ")";
+            }
+        }
+
     }
 }
