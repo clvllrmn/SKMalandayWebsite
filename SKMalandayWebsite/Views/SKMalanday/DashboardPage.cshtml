@@ -1,65 +1,38 @@
-﻿@{
+@{
     Layout = "~/Views/Shared/_SKMalandayLayout.cshtml";
 }
+<link rel="stylesheet" href="../content/Dashboard.css">
 
-<link rel="stylesheet" href="~/Content/Dashboard.css" />
+<div ng-app="SKMalandayApp" ng-controller="SKMalandayController" class="dashboard-container">
 
-<div class="dashboard-container" ng-controller="SKMalandayController">
+    <h1>SK Malanday Dashboard</h1>
 
-    <header class="header">
-        <h1>Simple Dashboard</h1>
-        <div class="profile-icon">U</div>
-    </header>
+    <!-- Upload Image -->
+    <div class="upload-box">
+        <label>Upload Project Picture:</label>
 
-    <div class="content-grid">
+        <input type="file" id="imageInput" accept="image/*"
+               onchange="angular.element(this).scope().previewImage(this)" />
 
-        <!-- PHOTO UPLOAD CARD -->
-        <div class="card photo-card">
-            <h2>Upload Photo</h2>
+        <label style="margin-top:10px;">Project Title:</label>
+        <input type="text" ng-model="projectTitle" placeholder="Enter project title">
+    </div>
 
-            <!-- Upload Area -->
-            <div class="upload-area" ng-click="triggerFileInput()">
-                <p>Click to browse or drag & drop your photo</p>
-            </div>
+    <!-- Preview -->
+    <div ng-if="tempImage" class="preview-container">
+        <img ng-src="{{tempImage}}" class="preview-img" />
+        <button class="remove-btn" ng-click="removePreview()">Remove</button>
+    </div>
 
-            <!-- Hidden File Input -->
-            <input type="file"
-                   id="fileInput"
-                   accept="image/*"
-                   style="display:none;"
-                   onchange="angular.element(this).scope().onFileSelect(this)" />
+    <!-- Add Button -->
+    <button class="add-btn" ng-click="addToList()">Add to UI List</button>
 
-            <!-- Upload Button -->
-            <button class="upload-button" ng-click="uploadPhoto()">
-                Upload Image
-            </button>
-
-            <!-- Preview Image -->
-            <img ng-if="previewImageUrl"
-                 ng-src="{{ previewImageUrl }}"
-                 id="previewImage"
-                 style="margin-top:15px; width:100%; border-radius:12px; display:block;" />
-
-            <!-- Status -->
-            <p id="uploadStatus">{{ uploadStatus }}</p>
+    <!-- Project Gallery -->
+    <div class="project-grid">
+        <div class="project-card" ng-repeat="p in projectList">
+            <img ng-src="{{p.image}}">
+            <h3>{{p.title}}</h3>
         </div>
-
-        <!-- ANALYTICS CARD -->
-        <div class="card analytics-card">
-            <h2>Analytics Overview</h2>
-
-            <div class="chart-container">
-                <h3>Monthly Activity</h3>
-                <canvas id="monthlyActivityChart"></canvas>
-            </div>
-
-            <div class="chart-container">
-                <h3>Content Categories</h3>
-                <canvas id="categoryChart"></canvas>
-            </div>
-
-        </div>
-
     </div>
 
 </div>
