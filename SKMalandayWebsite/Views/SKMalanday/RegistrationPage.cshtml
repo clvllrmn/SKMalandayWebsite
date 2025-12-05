@@ -1,92 +1,121 @@
-﻿@{
+@{
     Layout = "~/Views/Shared/_SKMalandayLayout.cshtml";
 }
-
 <link rel="stylesheet" href="~/Content/Registration.css" />
 
-<body ng-controller="SKMalandayController">
+<div ng-app="SKMalandayApp" ng-controller="SKMalandayController">
 
     <div class="content">
         <div class="form-container">
             <h2>Youth Registration Form</h2>
-            <p>Be part of the SK Malanday community. Fill out the form below!</p>
+
+            @*<p ng-show="!isEditing">Be part of the SK Malanday community. Fill out the form below!</p>
+            <p ng-show="isEditing" style="color: #e67e22; font-weight:bold;">Editing details for: {{ }}</p>*@
 
             <form name="registrationForm" novalidate>
 
                 <div class="form-group">
-                    <label>Full Name <span class="required">*</span></label>
-                    <input type="text" ng-model="user.fullName" required maxlength="50">
+                    <label for="fullname">Full Name <span class="required">*</span></label>
+                    <input type="text" id="fullname" name="fullname" ng-model="fullName" required maxlength="50">
+                    <span class="error" ng-show="registrationForm.fullname.$touched && registrationForm.fullname.$error.required">
+                        Full Name is required.
+                    </span>
+                    <span class="error" ng-show="registrationForm.fullname.$error.maxlength">
+                        Maximum 50 characters only.
+                    </span>
                 </div>
 
                 <div class="form-group">
-                    <label>Birthdate <span class="required">*</span></label>
-                    <input type="date" ng-model="user.birthDate" required>
+                    <label for="birthdate">Birthdate <span class="required">*</span></label>
+                    <input type="date" id="birthdate" name="birthdate" ng-model="birthDate" required>
+                    <span class="error" ng-show="registrationForm.birthdate.$touched && registrationForm.birthdate.$error.required">
+                        Birthdate is required.
+                    </span>
                 </div>
 
                 <div class="form-group">
-                    <label>Gender <span class="required">*</span></label>
-                    <select ng-model="user.gender" required>
-                        <option value="">Select Gender</option>
+                    <label for="gender">Gender <span class="required">*</span></label>
+                    <select id="gender" name="gender" ng-model="gender" required>
+                        <option value="" disabled>Select Gender</option>
                         <option value="Male">Male</option>
                         <option value="Female">Female</option>
                         <option value="Prefer not to say">Prefer not to say</option>
                     </select>
+                    <span class="error" ng-show="registrationForm.gender.$touched && registrationForm.gender.$error.required">
+                        Gender is required.
+                    </span>
                 </div>
 
                 <div class="form-group">
-                    <label>Complete Address <span class="required">*</span></label>
-                    <textarea ng-model="user.address" maxlength="50" required></textarea>
+                    <label for="address">Complete Address <span class="required">*</span></label>
+                    <textarea id="address" name="address" ng-model="address" maxlength="50" required class="form-control"></textarea>
+                    <small>{{ address ? address.length : 0 }} / 50 characters</small>
+                    <span class="error" ng-show="registrationForm.address.$touched && registrationForm.address.$error.required">
+                        Address is required.
+                    </span>
                 </div>
 
                 <div class="form-group">
-                    <label>Contact Number <span class="required">*</span></label>
-                    <input type="text" ng-model="user.contactNo" maxlength="11"
-                           ng-pattern="/^[0-9]{11}$/"
+                    <label for="contactNumber">Contact Number <span class="required">*</span></label>
+                    <input type="text" id="contactNumber"
+                           name="contactNo" ng-model="contactNo" ng-pattern="/^[0-9]{11}$/"
+                           maxlength="11"
                            oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-                           required>
+                           required />
+                    <span ng-show="registrationForm.contactNo.$error.pattern" class="error">
+                        Contact number must be exactly 11 digits.
+                    </span>
+                    <span class="error" ng-show="registrationForm.contactNo.$touched && registrationForm.contactNo.$error.required">
+                        Contact Number is required.
+                    </span>
                 </div>
 
                 <div class="form-group">
-                    <label>Email (Optional)</label>
-                    <input type="email" ng-model="user.email" maxlength="50">
+                    <label for="email">Email (optional)</label>
+                    <input type="email" id="email" name="email" ng-model="email" maxlength="50">
+                    <span class="error" ng-show="registrationForm.email.$touched && registrationForm.email.$error.email">
+                        Enter a valid email address.
+                    </span>
                 </div>
 
                 <div class="form-group">
                     <label>Your Interest</label>
-                    <select ng-model="user.interest">
+                    <select ng-model="interest" class="form-control">
                         <option value="">-- Select an interest --</option>
-                        <option value="Leadership">Leadership</option>
-                        <option value="Sports">Sports</option>
-                        <option value="Arts">Arts</option>
-                        <option value="Education">Education</option>
-                        <option value="Mental Health">Mental Health</option>
-                        <option value="Gender Equality">Gender Equality</option>
-                        <option value="Environment">Environment</option>
-                        <option value="Entrepreneurship">Entrepreneurship</option>
-                        <option value="Digital Literacy">Digital Literacy</option>
+                        <option value="1">Leadership</option>
+                        <option value="2">Sports</option>
+                        <option value="8">Arts</option>
+                        <option value="9">Education</option>
+                        <option value="10">Mental Health</option>
+                        <option value="4">Gender Equality</option>
+                        <option value="5">Environment</option>
+                        <option value="6">Entrepreneurship</option> 
+                        <option value="7">Digital Literacy</option>
                     </select>
                 </div>
 
-                <!-- Buttons -->
+                <div class="selected-interests" ng-if="interest">
+                    <span class="interest-tag">{{ interest }}</span>
+                </div>
+
                 <div class="button-group">
-                    <button type="button" class="btn-submit"
-                            ng-click="isEdit ? UpdateUser() : AddUser()">
-                        {{ isEdit ? 'Update' : 'Sign Up' }}
+                    <button type="button" class="btn-submit" ng-click="AddUser()">
+                        {{ isEditing ? 'Update User' : 'Sign Up' }}
                     </button>
 
-                    <button type="button" class="btn-delete" ng-click="ClearForm()">
-                        Clear
-                    </button>
+                    <button type="button" class="btn-delete" ng-click="cancelEdit()" ng-show="isEditing">Cancel</button>
+
+                    <button type="button" class="btn-delete" ng-click="deleteData()" ng-show="!isEditing && newMultiArray.length > 0">Delete All</button>
                 </div>
+
+
 
             </form>
         </div>
     </div>
 
-    <!-- TABLE FOR USERS -->
-    <div class="form-container" ng-show="users.length > 0">
+    <div class="form-container" ng-show="newMultiArray.length > 0">
         <h3>Registered Users</h3>
-
         <div class="table-container">
             <table id="usersTable">
                 <thead>
@@ -95,37 +124,37 @@
                         <th>Full Name</th>
                         <th>Birthday</th>
                         <th>Gender</th>
-                        <th>Email</th>
+                        <th>Contact</th>
                         <th>Address</th>
                         <th>Interest</th>
                         <th>Action</th>
                     </tr>
                 </thead>
-
                 <tbody>
-                    <tr ng-repeat="u in users track by $index">
+                    <tr ng-repeat="user in newMultiArray track by $index">
                         <td>{{$index + 1}}</td>
-                        <td>{{u.fullName}}</td>
-                        <td>{{u.birthDate | date:'longDate'}}</td>
-                        <td>{{u.gender}}</td>
-                        <td>{{u.email}}</td>
-                        <td>{{u.address}}</td>
-                        <td>{{u.interest}}</td>
-
+                        <td>{{user.fullName}}</td>
+                        <td>{{user.birthday | date:'mediumDate'}}</td>
+                        <td>{{user.gender}}</td>
+                        <td>{{user.contactNo}}</td>
+                        <td>{{user.address}}</td>
+                        <td>{{user.interest}}</td>
                         <td>
-                            <button ng-click="EditUser(u)">Edit</button>
-                            <button ng-click="DeleteUser(u.userID)">Delete</button>
+                            <button type="button" ng-click="editUser($index)" style="margin-right:5px; cursor:pointer;">Edit</button>
+                            <button type="button" ng-click="removeUser($index)" style="color:red; cursor:pointer;">Delete</button>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-
     </div>
 
-    <div class="form-container" ng-show="users.length === 0">
+    <div class="form-container" ng-show="newMultiArray.length === 0">
         <h3>Registered Users</h3>
-        <p style="text-align:center;">No registered users yet.</p>
+        <div class="table-container" style="text-align:center;">
+            <p>No registered users yet.</p>
+        </div>
     </div>
 
-</body>
+</div>
+
